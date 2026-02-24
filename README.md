@@ -84,3 +84,18 @@ After opening the frappe site in browser devtools ,while creating a new record o
 In bench console, run: import frappe; frappe.session.data and describe what it contains
 frappe.session.data returns the null dictionary while the frappe.session returns the sid ,data and the user
 
+With developer_mode: 1 - trigger a Python exception in one of your whitelisted methods. What does the browser receive?
+returned a undefined variable in the python whitelisted function and the browser recived the nameerror
+  File "apps/quickfix/quickfix/api.py", line 6, in execute
+    return x
+NameError: name 'x' is not defined
+
+Set developer_mode: 0 - repeat. What does the browser receive now? Why is this
+important for production?
+here since we are running in local development when the developer mode is either 0 or 1 the error full be shown fully with the traceback
+but when in the production mode ,when the developer mode is 0 the error will be shown as internal server error and not the full traceback will be shown 
+this is important for production because while showing the detailled error this may expose the detailled code structure and information 
+
+Where do production errors go if they are hidden from the browser?
+the production errors which are hidden from browser are stored in log file 
+the bench contains a folder log with frappe.log
