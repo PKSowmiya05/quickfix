@@ -59,3 +59,28 @@ WORKER: some tasks are heavy and slows down the ui ,so background jobs are intro
         the queues seprates the jobs and assigns to the the workers to complete those tasks
 Scheduler: it is a time of background job that is trigerred based on the time basis
 Socket io: client browser communication that provides realtime notifications
+
+When a browser hits /api/method/quickfix.api.get_job_summary - what Python
+function handles this request and how does Frappe find it?
+When a browser hits /api/method/quickfix.api.get_job_summary the frappe whitelist handles the custom api calls and executes the function
+How does the frappe knows
+when  a client makes a server requests through api method the function first looks into the app.py,so that app.py recieves the request and passes to the function execute_cmd in handler.py which then calls the frappe.get_attr() , the get_attr() from init.py is used to call the whitelisted python function and the function returns a json file
+consider the scenario if we have a wrong function name provided then there shows up a traceback error from the handler.py 
+
+
+When a browser hits /api/resource/Job Card/JC-2024-0001 - what happens
+differently compared to /api/method/?
+when  /api/method/ is called it uses the custom whitelisted python function that is written by developer 
+but when a browser hits /api/resource/Job Card/JC-2024-0001 the rest api call is being processed that is there is no need of the custom functions ,it directly access the database ,fetches or modifies the database without the python custom function ,the rest api controlers directly access the job card doctype and the document jc-2024-000021 and returns the json data
+
+
+When a browser hits /track-job - which file/function handles it and why?
+when the browser hits the track-job ,app.py recieves the request ,then the request is sent to the handler.py ,so that the handler.py identifies the type of the request whether it is rest api call or the custom method then it extracts the method path and loads the execute_cmd in the handler.py file ,thenn the request is sent to the init.py to load the frappe.get_attr() function then the whitelist function is checked and the function is executed and the response is sent throught the json file
+
+Open your Frappe site in browser devtools. Find the X-Frappe-CSRF-Token in a POST request. Where does this value come from and what would happen if you
+omitted it?
+After opening the frappe site in browser devtools ,while creating a new record or while saving the record the post request is made ,this post request value is a randomly generated value to store in the session id and we can encounter the csrf token under the request headers or in the bench console if we give frapp.csrf_token we can get the token .If the token is omitted the put post method doesnt havet he session id and it will not work ,if tokens are missing frappe will bolck the request for the security reasons
+
+In bench console, run: import frappe; frappe.session.data and describe what it contains
+frappe.session.data returns the null dictionary while the frappe.session returns the sid ,data and the user
+
