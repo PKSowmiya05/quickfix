@@ -99,3 +99,20 @@ this is important for production because while showing the detailled error this 
 Where do production errors go if they are hidden from the browser?
 the production errors which are hidden from browser are stored in log file 
 the bench contains a folder log with frappe.log
+
+
+In a whitelisted method, call frappe.get_doc("Job Card", name) WITHOUT ignore_permissions. Then log in as a QF Technician user who is NOT assigned to that job. What error is raised and at what layer does Frappe stop the request?
+
+
+while logginned as the qf technician where user not assigned to the job i didnt get any permission error ,because there is no check permission code 
+instead i got the name field becuase the user has the select permission and this select permission is used here
+self.init_valid_columns() this function is called from the document.py and the function redirects to the def init_valid_columns(self) function in the base_document.py instead of the permission check it directly validates the column in the table schema and returns the valid column with the select permissions 
+
+Run: frappe.db.sql("SHOW TABLES LIKE '%Job%'") and list what you see. Explain the tab prefix convention.
+ this is the output i see (('tabJob card',), ('tabScheduled Job Log',), ('tabScheduled Job Type',))
+ when ever u create the tables in the doctype ,frappe automatically adds the tab prefix,this tab prefix easy helpful for the easy identification of the doctype table
+
+ Run: frappe.db.sql("DESCRIBE `tabJob card`", as_dict=True) and list 5 column names you recognise from your DocType fields.
+ i saw the database columns created for the Job card doctype the columns names include title,name,owner,creation,and modified
+
+ 

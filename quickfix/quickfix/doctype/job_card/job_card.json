@@ -1,25 +1,28 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "JC-.####",
  "creation": "2026-02-24 17:42:32.694797",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_deh0"
+  "title"
  ],
  "fields": [
   {
-   "fieldname": "section_break_deh0",
-   "fieldtype": "Section Break"
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "title"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-24 17:42:32.694797",
+ "modified": "2026-02-24 22:41:08.772837",
  "modified_by": "Administrator",
  "module": "Quickfix",
  "name": "Job card",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -33,6 +36,15 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "role": "Technician",
+   "select": 1,
+   "share": 1
   }
  ],
  "row_format": "Dynamic",
