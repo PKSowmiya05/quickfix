@@ -115,4 +115,49 @@ Run: frappe.db.sql("SHOW TABLES LIKE '%Job%'") and list what you see. Explain th
  Run: frappe.db.sql("DESCRIBE `tabJob card`", as_dict=True) and list 5 column names you recognise from your DocType fields.
  i saw the database columns created for the Job card doctype the columns names include title,name,owner,creation,and modified
 
- 
+ What are the three numeric values of docstatus and what state does each represent?
+docstatus 0 : draft
+docstatus 1:  submitted
+docstatus 2 : cancelled
+
+Can you call doc.save() on a submitted document? What about doc.submit() on a
+cancelled one? Test in bench console and explain why.
+the sumitted document contains the docstatus 1 which cannot be change so that doc.save() cant be called ,only when we cancel a submitted doctype or edit a submittable doctype through the allow on submit option the doc.save will be called .No a cancelled document cant be submitted again because the docstatus of the cancelled document becomes 2 and cant be changed ,the one way to submit the cancelled document  is to amend the document and the document can be submitted again
+
+Why would you see a "Document has been modified after you have opened it" error and how does Frappe prevent concurrent overwrites?
+the error occurs 
+when user A loginned in ,and make changes and user B logins in make changes the error is showed that the document is modified ,frappe prevent concurrent overwrites by checking the doc modified and the db modified if not equal throws an error 
+
+The following snippet has TWO bugs related to document lifecycle. Identify both and write
+the corrected version:
+def validate(self):
+self.total = sum(r.amount for r in self.items)
+self.save()
+other = frappe.get_doc("Spare Part", self.part)
+other.stock_qty -= self.qty
+other.save()
+
+def validate(self):
+self.total= sum(r.amount for r in self.items)
+validate is executed during the doc.save() 
+if self._action == "save":
+self.run_method("validate"),
+again calling the self.save triggers the validate again which then leads to a infinite recursiom  
+
+def on_submit(self):
+other = frappe.get_doc("Spare Part", self.part)
+other.stock_qty -= self.qty
+other.save()
+the quantity should be reduced so can be put inside the on submit hook ,so that this action happens during the submit because validate function can run again and again and the stocl quantity will be updated again again
+
+When you append a row to Job Card.parts_used and save, what 4 columns does Frappe automatically set on the child table row?
+whwen we append a child table row to the parent docytpe ,frappe automatically sets four columns including parent(wh0) ,parenttype(which doctype),parentfield(which table),index(which row) to link the child row with the parent doctype
+
+What is the DB table name for the Part Usage Entry DocType?
+tabPart Usage Entry
+
+If you delete row at idx=2 and re-save, what happens to idx values of remaining rows?
+when a row created and the idx =2 is deleted frappe automatically reorders the index and assigns the index accordingly ,this ensures that the indexing is ordered sequentially ,this is done when the doc,save is being executed .i created a Job Card with multiple child rows, deleted the row with idx = 2, saved the document, and verified the idx values using bench console and SQL query.
+
+Rename one of your test Technician records using the Rename Document feature. Then check: does the assigned_technician field on linked Job Cards automatically update? Why or why not? What does "track changes" mean in this context?
+i created the test technician and renamed it through the rename document feature ,then while looking in to the assigned_technician filed the renamed value got automatically updated ,because it is a link field and frappe updates all the link fields during the rename .track changes means frappe records field modifications in the version table and shows them in the timeline, allowing us to see old and new values.
