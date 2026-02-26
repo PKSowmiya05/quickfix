@@ -5,7 +5,7 @@ app_description = "Assessment purpose"
 app_email = "karthisowmiya05@gmail.com"
 app_license = "mit"
 
-fixtures = [{"doctype": "Device Type"}]
+fixtures = ["Device Type", "Role", "Custom DocPerm"]
 # Apps
 # ------------------
 
