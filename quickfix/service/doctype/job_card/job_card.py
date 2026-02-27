@@ -37,7 +37,7 @@ class JobCard(Document):
 			stock = frappe.db.get_value("Spare Part", i.part, "stock_quantity")
 			new_stock = stock - i.quantity
 			frappe.db.set_value("Spare Part", i.part, "stock_quantity", new_stock)
-		# here we can bypass the ignore permissions because the deduction of the stock quantity is not manually reduced by the user it is systematically reduced and can ignore the user permissions
+		# here we cant use ignore_permissions true because frappe.set_value dont have the syntax to pass the ignore_permission
 
 		doc = frappe.get_doc(
 			{
@@ -57,3 +57,19 @@ class JobCard(Document):
 			message={"job_card": self.name, "customer_name": self.customer_name, "status": self.status},
 			user=self.owner,
 		)
+		frappe.enqueue("quickfix.service.doctype.job_card.mail.send_mail", job_card=self.name)
+
+	def on_cancel(self):
+		self.status = "Cancelled"
+		for i in self.parts_used:
+			stock = frappe.db.get_value("Spare Part", i.part, "stock_quantity")
+			new_stock = stock + i.quantity
+			frappe.db.set_value("Spare Part", i.part, "stock_quantity", new_stock)
+		invoice = frappe.get_value("Service Invoice", {"job_card": self.name})
+		if invoice:
+			doc = frappe.get_doc("Service Invoice", invoice)
+			doc.cancel()
+
+	def on_trash(self):
+		if self.status != "Draft" and self.status != "Cancelled":
+			frappe.throw("Cannot delete")
