@@ -36,7 +36,7 @@
  "links": [],
  "modified": "2026-02-26 10:37:44.968116",
  "modified_by": "Administrator",
- "module": "Quickfix",
+ "module": "Service",
  "name": "Device Type",
  "naming_rule": "By fieldname",
  "owner": "Administrator",

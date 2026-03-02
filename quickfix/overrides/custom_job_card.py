@@ -53,3 +53,20 @@ def extend_bootinfo(bootinfo):
 	s = frappe.get_single("QuickFix Settings")
 	bootinfo.quickfix_sname = s.shop_name
 	bootinfo.quickfix_memail = s.manager_email
+
+
+def login(login_manager):
+	frappe.log_error(title="User Login", message=f"{frappe.session.user} logged in successfully")
+
+
+def logout(login_manager):
+	frappe.log_error(title="User logged out", message=f"{frappe.session.user} logged out successfully")
+
+
+def get_shop_name():
+	setting = frappe.get_single("QuickFix Settings")
+	return setting.shop_name
+
+
+def format_job_id(value):
+	return f"JOB#{value}"

@@ -54,7 +54,7 @@
  "links": [],
  "modified": "2026-02-25 15:43:45.000873",
  "modified_by": "Administrator",
- "module": "Quickfix",
+ "module": "Service",
  "name": "Part Usage Entry",
  "owner": "Administrator",
  "permissions": [],
