@@ -23,3 +23,33 @@ class CustomJobCard(JobCard):
 
 # override_doctype method is used to change the core behaviour of the doctype while the doc_events is used to add or change functionalities like validate or submit
 # override_doctype method is chosen over_doc events when full control over the doctype is required
+
+
+def install():
+	device = ["Smart Phone", "Laptop", "Tablet"]
+	for d in device:
+		if not frappe.db.exists("Device Type", d):
+			doc = frappe.get_doc({"doctype": "Device Type", "device_type": d})
+			doc.insert()
+	if not frappe.db.exists("QuickFix Settings"):
+		doc = frappe.get_doc(
+			{
+				"doctype": "QuickFix Settings",
+				"default_labour_charge": 600,
+				"manager_email": "karthisowmiya05@gmail.com",
+			}
+		)
+		doc.insert()
+
+	print("QuickFix setup completed successfully")
+
+
+def uninstall():
+	if frappe.db.exists("Job Card", {"docstatus": 1}):
+		raise frappe.ValidationError("Submittable doctype exist")
+
+
+def extend_bootinfo(bootinfo):
+	s = frappe.get_single("QuickFix Settings")
+	bootinfo.quickfix_sname = s.shop_name
+	bootinfo.quickfix_memail = s.manager_email

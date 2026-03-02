@@ -115,6 +115,8 @@ Run: frappe.db.sql("SHOW TABLES LIKE '%Job%'") and list what you see. Explain th
  Run: frappe.db.sql("DESCRIBE `tabJob card`", as_dict=True) and list 5 column names you recognise from your DocType fields.
  i saw the database columns created for the Job card doctype the columns names include title,name,owner,creation,and modified
 
+ 
+
  What are the three numeric values of docstatus and what state does each represent?
 docstatus 0 : draft
 docstatus 1:  submitted
@@ -161,3 +163,11 @@ when a row created and the idx =2 is deleted frappe automatically reorders the i
 
 Rename one of your test Technician records using the Rename Document feature. Then check: does the assigned_technician field on linked Job Cards automatically update? Why or why not? What does "track changes" mean in this context?
 i created the test technician and renamed it through the rename document feature ,then while looking in to the assigned_technician filed the renamed value got automatically updated ,because it is a link field and frappe updates all the link fields during the rename .track changes means frappe records field modifications in the version table and shows them in the timeline, allowing us to see old and new values.
+
+Assume the Frappe core updates Job Card's validate() to add a new check. If you
+override_doctype_class and forget to update super() - what breaks? Write a test that catches this.
+if we forget to update super() the core validations made will not work and only the overrided function will work 
+a test that catches this is that in validate i have written code so that if customer name is empty the document will not be saved and in the override doctype classs i have wrote the validation that checks the phone number validity ,if super doesnt exist allows the null customer name if super exits it doesnt allow null customer name
+
+
+

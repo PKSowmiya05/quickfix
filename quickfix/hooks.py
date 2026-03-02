@@ -84,13 +84,15 @@ fixtures = ["Device Type", "Role", "Custom DocPerm"]
 # ------------
 
 # before_install = "quickfix.install.before_install"
-# after_install = "quickfix.install.after_install"
+after_install = "quickfix.overrides.custom_job_card.install"
 
 # Uninstallation
 # ------------
 
-# before_uninstall = "quickfix.uninstall.before_uninstall"
+before_uninstall = "quickfix.overrides.custom_job_card.uninstall"
 # after_uninstall = "quickfix.uninstall.after_uninstall"
+
+extend_bootinfo = "quickfix.overrides.custom_job_card.extend_bootinfo"
 
 # Integration Setup
 # ------------------
