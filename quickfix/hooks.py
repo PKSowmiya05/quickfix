@@ -24,6 +24,7 @@ fixtures = ["Device Type", "Role", "Custom DocPerm"]
 
 # Includes in <head>
 # ------------------
+app_include_js = "quickfix.bundle.js"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/quickfix/css/quickfix.css"
@@ -93,6 +94,14 @@ before_uninstall = "quickfix.overrides.custom_job_card.uninstall"
 # after_uninstall = "quickfix.uninstall.after_uninstall"
 
 extend_bootinfo = "quickfix.overrides.custom_job_card.extend_bootinfo"
+
+on_session_creation = "quickfix.overrides.custom_job_card.login"
+on_logout = "quickfix.overrides.custom_job_card.logout"
+
+jinja = {
+	"methods": ["quickfix.overrides.custom_job_card.get_shop_name"],
+	"filters": ["quickfix.overrides.custom_job_card.format_job_id"],
+}
 
 # Integration Setup
 # ------------------

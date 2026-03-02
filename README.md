@@ -169,5 +169,16 @@ override_doctype_class and forget to update super() - what breaks? Write a test 
 if we forget to update super() the core validations made will not work and only the overrided function will work 
 a test that catches this is that in validate i have written code so that if customer name is empty the document will not be saved and in the override doctype classs i have wrote the validation that checks the phone number validity ,if super doesnt exist allows the null customer name if super exits it doesnt allow null customer name
 
+what is the difference? When would you use each?
+app_include_js is used to use the javascript into the frappe desk for logged  backend users.web_include_js is used to use the javascript into public website or portal pages they serve different environments and should be used depending on whether the customization is for internal users/desk or external users/website .
 
+doctype_js for Job Card is used only when a specific dictype form is used, doctype_list_js for Job Card is used for the particular list view of the specific doctype
+doctype_tree_js is not applicable here becuase it used for the doctype that uses the hierarchial structure ,whic is used to display the tree doctype,here job card is a normal doctype so doctype_tree_js is not applicable
+
+explain what bench build --app quickfix does and why assets need cache-busting after JS changes
+for a specific application the bench build command compiles all the js and css assets files for the production,it makes sure that the latest updates are used 
+after the js changes the cache the assests need cache busting because it makes the web users to load the new updated js files instead of using the old js files that is stored in the local cache
+
+Explain: what is the difference between a Jinja context available in Print Formats vs one available in Web Pages? Are they the same?
+jinja context available in the print formats recieves the document context while the web pages receives the website requests,the print format already knows which document which is printing while the web pages shows the data which we ask for,no they are not same
 
