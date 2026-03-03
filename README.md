@@ -102,8 +102,6 @@ the bench contains a folder log with frappe.log
 
 
 In a whitelisted method, call frappe.get_doc("Job Card", name) WITHOUT ignore_permissions. Then log in as a QF Technician user who is NOT assigned to that job. What error is raised and at what layer does Frappe stop the request?
-
-
 while logginned as the qf technician where user not assigned to the job i didnt get any permission error ,because there is no check permission code 
 instead i got the name field becuase the user has the select permission and this select permission is used here
 self.init_valid_columns() this function is called from the document.py and the function redirects to the def init_valid_columns(self) function in the base_document.py instead of the permission check it directly validates the column in the table schema and returns the valid column with the select permissions 
@@ -114,8 +112,6 @@ Run: frappe.db.sql("SHOW TABLES LIKE '%Job%'") and list what you see. Explain th
 
  Run: frappe.db.sql("DESCRIBE `tabJob card`", as_dict=True) and list 5 column names you recognise from your DocType fields.
  i saw the database columns created for the Job card doctype the columns names include title,name,owner,creation,and modified
-
- 
 
  What are the three numeric values of docstatus and what state does each represent?
 docstatus 0 : draft
@@ -168,6 +164,13 @@ Assume the Frappe core updates Job Card's validate() to add a new check. If you
 override_doctype_class and forget to update super() - what breaks? Write a test that catches this.
 if we forget to update super() the core validations made will not work and only the overrided function will work 
 a test that catches this is that in validate i have written code so that if customer name is empty the document will not be saved and in the override doctype classs i have wrote the validation that checks the phone number validity ,if super doesnt exist allows the null customer name if super exits it doesnt allow null customer name
+
+Register TWO validate handlers on Job Card - one in your main controller and one in doc_events. in what order do they run? What happens if both raise a frappe.ValidationError?
+the main controller runs first and then the controller in the doc events runs then ,when both raise a frappe.validation error 
+the first executed controller method rises an exception ,execution stops immediately and the hooks doesnt even execute
+
+what happens when you register "*" AND a specific DocType handler for the same event? Do both run?
+for the same event the specific doctype controller and the wildcard controller also works ,frappe first calls the specific doctype controller and then calls the wildcard controller
 
 what is the difference? When would you use each?
 app_include_js is used to use the javascript into the frappe desk for logged  backend users.web_include_js is used to use the javascript into public website or portal pages they serve different environments and should be used depending on whether the customization is for internal users/desk or external users/website .

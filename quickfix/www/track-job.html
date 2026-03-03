@@ -1,0 +1,29 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<div class="container mt-5">
+    <h1>Track My Job</h1>
+
+    <form method="GET">
+        <div class="form-group">
+            <label>Enter Job ID</label>
+            <input type="text" name="job_id" class="form-control" placeholder="JOB-0001">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">
+            Track
+        </button>
+    </form>
+
+    <hr>
+
+    {% if frappe.form_dict.job_id %}
+        {% set job = frappe.get_doc("Job Card", frappe.form_dict.job_id) %}
+        <h4>Status:</h4>
+        <p><strong>{{ job.status }}</strong></p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
