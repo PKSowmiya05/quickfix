@@ -103,6 +103,17 @@ jinja = {
 	"filters": ["quickfix.overrides.custom_job_card.format_job_id"],
 }
 
+website_route_rules = [{"from_route": "/track-job", "to_route": "track-job"}]
+
+portal_menu_items = [{"title": "Track My Job", "route": "/track-job", "role": "Administrator"}]
+
+doc_events = {
+	"*": {
+		"on_update": "quickfix.quickfix.audit.log_change",
+		"on_submit": "quickfix.quickfix.audit.log_change",
+		"on_cancel": "quickfix.quickfix.audit.log_change",
+	}
+}
 # Integration Setup
 # ------------------
 # To set up dependencies/integrations with other apps
