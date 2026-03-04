@@ -176,7 +176,7 @@ what is the difference? When would you use each?
 app_include_js is used to use the javascript into the frappe desk for logged  backend users.web_include_js is used to use the javascript into public website or portal pages they serve different environments and should be used depending on whether the customization is for internal users/desk or external users/website .
 
 doctype_js for Job Card is used only when a specific dictype form is used, doctype_list_js for Job Card is used for the particular list view of the specific doctype
-doctype_tree_js is not applicable here becuase it used for the doctype that uses the hierarchial structure ,whic is used to display the tree doctype,here job card is a normal doctype so doctype_tree_js is not applicable
+doctype_tree_js is not applicable here becuase it used for the doctype that uses the hierarchial structure ,which is used to display the tree doctype,here job card is a normal doctype so doctype_tree_js is not applicable
 
 explain what bench build --app quickfix does and why assets need cache-busting after JS changes
 for a specific application the bench build command compiles all the js and css assets files for the production,it makes sure that the latest updates are used 
@@ -185,3 +185,14 @@ after the js changes the cache the assests need cache busting because it makes t
 Explain: what is the difference between a Jinja context available in Print Formats vs one available in Web Pages? Are they the same?
 jinja context available in the print formats recieves the document context while the web pages receives the website requests,the print format already knows which document which is printing while the web pages shows the data which we ask for,no they are not same
 
+What is the _qf_patched guard for in frappe.What breaks without it?
+the patch runs only once at the runtime and the qf patched helps to ensure that the patch is executed only once and preventing the recurssion and the duplication issues
+
+Why is isolating patches in monkey_patches.py better than scattering them in __init__.py?
+the init.py file runs automatically when we import it ,so if you put monkey patch code in init_.py, it runs automatically.
+During dev mode the code reloads init.py runs again,patch runs again makes the recurssion problem
+
+What is the correct escalation path: try doc_events first - then override_doctype_class - then override_whitelisted_methods - then monkey patch. Why is this the order?
+ first we try doc_events because it is the safest and least complex point. If that is insufficient, they can move to override_doctype_class, then override_whitelisted_methods, and finally monkey patching as a last option. Each step increases power, system impact, and risk.
+
+ 
