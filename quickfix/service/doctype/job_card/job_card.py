@@ -54,8 +54,8 @@ class JobCard(Document):
 		doc.insert(ignore_permissions=True)
 		frappe.publish_realtime(
 			"job_ready",
-			message={"job_card": self.name, "customer_name": self.customer_name, "status": self.status},
-			user=self.owner,
+			{"message": "Job is Ready for Delivery"},
+			user=frappe.session.user,
 		)
 		frappe.enqueue("quickfix.service.doctype.job_card.mail.send_mail", job_card=self.name)
 
