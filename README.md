@@ -195,4 +195,9 @@ During dev mode the code reloads init.py runs again,patch runs again makes the r
 What is the correct escalation path: try doc_events first - then override_doctype_class - then override_whitelisted_methods - then monkey patch. Why is this the order?
  first we try doc_events because it is the safest and least complex point. If that is insufficient, they can move to override_doctype_class, then override_whitelisted_methods, and finally monkey patching as a last option. Each step increases power, system impact, and risk.
 
- 
+ H1 
+Making a frappe.call inside the validate client event (before_save handler) - explain why this does not work
+Using onload or refresh for async data fetches
+making a frappe.call inside client-side validate does not work properly because frappe.call is asynchronous and does not block execution.the form may save before the server response runs making the validation too late
+async calls are safe inside onload or refresh because those events are used for UI updates and do not control the document save lifecycle.
+
