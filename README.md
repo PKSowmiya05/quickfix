@@ -201,3 +201,15 @@ Using onload or refresh for async data fetches
 making a frappe.call inside client-side validate does not work properly because frappe.call is asynchronous and does not block execution.the form may save before the server response runs making the validation too late
 async calls are safe inside onload or refresh because those events are used for UI updates and do not control the document save lifecycle.
 
+H3
+describe what a Tree DocType is (example: Account,Employee hierarchy). What is doctype_tree_js used for and what extra fields does a tree DocType require (parent_field, is_group)?
+tree doctype is used to store hirearchial data where the one record is the parent and the other record is the child 
+doctype_tree_js is a javascript file that ensures how ui works for the tree doctype
+A tree doctype needs special fields to maintain hierarchy.the parent_field stores the parent record.the is_group field determines whether a node can have children
+
+H4
+explain the tradeoffs - when would a consultant use Client Script DocType vs an app developer use shipped JS? What are the risks of Client Script DocType in production?
+client script doctype is used by consultants for quick, site-specific UI customizations because it is stored in the database and does not require deployment.app developers prefer shipped js files because they are stored in the app code with version control, making them safer, maintainable, and consistent for production environments.
+
+Demonstrate the hiding fields vs permission security pitfall: add a JS field hide that hides customer_phone for non-managers - then show that an API call can still retrieve the field. Explain why hiding in JS is not a security measure.
+while writig the js script to hide the phone number hides the number only in ui but can be accessed through the postman because the db stores the value,so it is not secure in hiding in js,if wanted to hide we can use role permissions and even when postman call happens the phone number column will be hided
