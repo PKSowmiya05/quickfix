@@ -16,6 +16,12 @@ frappe.ui.form.on("Job Card", {
 				},
 			};
 		});
+		if (frm.doc.status == "In Repair") {
+			frappe.show_alert("Repair Started");
+		}
+		if (!frappe.user.has_role("QF Manager")) {
+			frm.set_df_property("customer_phone", "hidden", 1);
+		}
 
 		if (frm.doc.status == "In Repair") {
 			frm.dashboard.add_indicator("In Repair", "orange");

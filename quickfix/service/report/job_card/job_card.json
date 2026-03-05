@@ -1,0 +1,47 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-03-05 17:51:27.754812",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "device_type",
+   "fieldtype": "Link",
+   "label": "Device Type",
+   "mandatory": 0,
+   "options": "Device Type",
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": null,
+ "modified": "2026-03-05 19:20:40.105008",
+ "modified_by": "Administrator",
+ "module": "Service",
+ "name": "Job Card",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT \nname AS \"Name:Data:250\" , \ncustomer_name AS \"Customer Name:Data:250\", \ndevice_type AS \"Device Type:Link/Device Type:250\", \nstatus AS \"Status:Data:250\",\nassigned_technician AS \"Assigned Technician:Link/Technician:250\", \nestimated_cost AS \"Estimated Cost:Currency:250\"\nFROM `tabJob Card`\nWHERE status NOT IN (\"Delivered\",\"Cancelled\")\nAND (IFNULL(%(device_type)s,'') = '' OR device_type = %(device_type)s)\nORDER BY customer_name",
+ "ref_doctype": "Job Card",
+ "report_name": "Job Card",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "QF Service Staff"
+  },
+  {
+   "role": "QF Technician"
+  },
+  {
+   "role": "QF Manager"
+  }
+ ],
+ "timeout": 0
+}
