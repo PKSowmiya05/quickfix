@@ -213,3 +213,17 @@ client script doctype is used by consultants for quick, site-specific UI customi
 
 Demonstrate the hiding fields vs permission security pitfall: add a JS field hide that hides customer_phone for non-managers - then show that an API call can still retrieve the field. Explain why hiding in JS is not a security measure.
 while writig the js script to hide the phone number hides the number only in ui but can be accessed through the postman because the db stores the value,so it is not secure in hiding in js,if wanted to hide we can use role permissions and even when postman call happens the phone number column will be hided
+
+I1
+Demonstrate and explain the issues and solutions with respect to f-string SQL and the parameterized pattern.
+using f string makes the user input to inject into the sql query while the parameterized pattern passes the value separately and the database treats it as a seperate data
+
+Add a EXPLAIN statement in bench console for your query - screenshot the result and identify if an index is being used on the status column .Add a proper index on Job Card.status by modifying the DocType JSON to include search_index: 1 on the status field
+Before editing the json file![alt text](image.png),after adding search index ![alt text](image-1.png)
+
+  I4
+explain when you would use a Prepared Report vs a real-time Script Report. What are the staleness tradeoffs?
+Prepare report is used for the large dataeset such that the report runs in the background and the filters can be applied easily but the new changes in the report are not being updates,while the script slows down the process and not suitable for larger reports but automatically updates the value in the report
+
+Describe the caching risk: if underlying data changes between report preparations, what does the user see?
+while the data changes between the report preparation the report will still show the old cached data from the last preparation
