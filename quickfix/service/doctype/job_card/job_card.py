@@ -6,6 +6,9 @@ from frappe.model.document import Document
 
 
 class JobCard(Document):
+	def before_print(self, print_settings=None):
+		self.print_summary = f"{self.customer_name} - {self.device_brand} {self.device_model}"
+
 	def validate(self):
 		if self.customer_phone and len(self.customer_phone) != 10:
 			frappe.throw("Enter a valid phone number")
@@ -23,6 +26,7 @@ class JobCard(Document):
 		labour = frappe.get_single_value("QuickFix Settings", "default_labour_charge")
 		self.labour_charge = labour
 		self.final_amount = self.parts_total + self.labour_charge
+		self.amount = self.final_amount
 
 	def before_submit(self):
 		if self.status != "Ready for Delivery":
@@ -57,7 +61,11 @@ class JobCard(Document):
 			{"message": "Job is Ready for Delivery"},
 			user=frappe.session.user,
 		)
-		frappe.enqueue("quickfix.service.doctype.job_card.mail.send_mail", job_card=self.name)
+		frappe.log_error("pppppp")
+		frappe.enqueue(
+			method="quickfix.service.doctype.job_card.mail.send_mail", job_card=self.name, queue="short"
+		)
+		frappe.log_error("llllll")
 
 	def on_cancel(self):
 		self.status = "Cancelled"

@@ -114,6 +114,11 @@ doc_events = {
 		"on_cancel": "quickfix.quickfix.audit.log_change",
 	}
 }
+
+scheduler_events = {
+	"daily": ["quickfix.tasks.check_low_stock"],
+	"cron": {"0 2 1 * *": ["quickfix.tasks.generate_monthly_revenue_report"]},
+}
 # Integration Setup
 # ------------------
 # To set up dependencies/integrations with other apps

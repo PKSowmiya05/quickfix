@@ -227,3 +227,38 @@ Prepare report is used for the large dataeset such that the report runs in the b
 
 Describe the caching risk: if underlying data changes between report preparations, what does the user see?
 while the data changes between the report preparation the report will still show the old cached data from the last preparation
+
+  I5
+   when is Report Builder appropriate? When must you use Script Report? Describe a scenario where using Report Builder production would be a mistake.
+   report builder is required when we want to use for simple reports based and basic filtering purposes ,script report should be preferred when there is a custom logic ,dynamin link and joining of the table when the report builder cant handle 
+   consider a scenario to calculate the technician performance that calculates the total job ,average working hour and amount calculated which requires a aggregrate function which is difficult to handle using the report builder
+   
+   j1
+   Putting a frappe.get_all() call inside the Jinja template directly Pre-compute in before_print() and attach to self, then reference in template as doc.precomputed_field.
+   avoid calling frappe.get_all() directly in Jinja templates,instead required data should be pre-computed in the controller using before_print() and attached to the document object. The template then accesses it using doc.precomputed_field, improving performance and maintaining separation of logic and presentation.
+   
+   j2
+   In README_internals.md: explain the difference between "raw printing" (sending ESC/POS commands to a thermal printer) and Frappe's HTML-PDF rendering via WeasyPrint
+   Raw printing sends direct ESC/POS commands to a thermal printer, so it prints text quickly but supports only simple formatting. Frappe Framework printing uses HTML templates converted to PDF by WeasyPrint, which allows styled layouts but is slower.
+   List 3 CSS properties that work in a browser but fail in WeasyPrint
+   display: flex, display: grid, and position: fixed.
+   Use format_value() for every numeric field in the template - demonstrate what happens without it vs with it for a currency field
+   without format value the raw text is visible while using the format value u can see the formatted currency value
+
+   K1
+   Explain the 3 queue names (default, long, short) and when to use each
+   short is used to complete the quick task,default is used for the normal background jobs while the long is used for the heavy and time consuming tasks
+
+   Explain retry behavior: how many times does Frappe retry a failed background job by default?
+  it stores the failed job in the error log and no count specifically
+
+   K2
+   how do you disable the scheduler for a specific site? Why would you do this on a dev site?
+   we can disable the scheduler using the bench --site sitename disable-scheduler command ,we did this on a developer site to avoid the automatic background jobs during the testing of the site
+   Explain: what happens to scheduled jobs that were queued while the worker was down - do they run when the worker comes back up?
+   if the worker process is slow or down the job remains in the queue and it is not executed once when the worker starts again it reads the pending jobs and executes it automatically
+
+   K3
+   N+1 query detection and fix:
+   instaed of the usage of get doc ,here in the code we are trying to take up only two fields,but the get doc fetches the entire document so instead of using get doc we can use get value
+   
