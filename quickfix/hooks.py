@@ -116,8 +116,8 @@ doc_events = {
 }
 
 scheduler_events = {
-	"daily": ["quickfix.tasks.check_low_stock"],
-	"cron": {"0 2 1 * *": ["quickfix.tasks.generate_monthly_revenue_report"]},
+	"daily": ["quickfix.quickfix.tasks.check_low_stock"],
+	"cron": {"0 2 1 * *": ["quickfix.quickfix.tasks.generate_monthly_revenue_report"]},
 }
 # Integration Setup
 # ------------------
