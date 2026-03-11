@@ -261,4 +261,192 @@ while the data changes between the report preparation the report will still show
    K3
    N+1 query detection and fix:
    instaed of the usage of get doc ,here in the code we are trying to take up only two fields,but the get doc fetches the entire document so instead of using get doc we can use get value
+
+   K3
+   output using the get doc: Insert loop time: 0.5248019695281982
+   output using the bulk insert :Bulk insert time: 0.0458681583404541
+   buatically
+
+   K3
+   N+1 query detection and fix:
+   instaed of the usage of get doc ,here in the code we are trying to take up only two fields,but the get doc fetches the entire document so instead of using get doc we can use get value
+
+   K3
+   output using the get doc: Insert loop time: 0.5248019695281982
+   output using the bulk insert :Bulk insert time: 0.0458681583404541
+   bulk insert consumes less time
+   lk insert consumes less time
+
+   Explain: why would you NOT add a search index to every field? What is the performance cost of over-indexing?
+   we should not add search index to every field because it adds extra storage space in the database amd slows down the process
+   if too many indexes exist, every insert, update, or delete must update all indexes, which increases processing time and reduces overall database performance.
    
+   L1
+   GET /api/resource/Job Card - list Job Cards (use session cookie from browser)
+   http://quickfix-develop.localhost:8001/api/resource/Job Card
+   {
+    "data": [
+        {
+            "name": "JC-2026-00001"
+        },
+        {
+            "name": "JC-2026-00002"
+        },
+        {
+            "name": "JC-2026-00004"
+        },
+        {
+            "name": "JC-2026-00005"
+        },
+        {
+            "name": "JC-2026-00003"
+        },
+        {
+            "name": "JC-2026-00006"
+        },
+        {
+            "name": "JC-2026-00007"
+        },
+        {
+            "name": "JC-2026-00008"
+        },
+        {
+            "name": "JC-2026-00009"
+        },
+        {
+            "name": "JC-2026-00010"
+        },
+        {
+            "name": "JC-2026-00011"
+        },
+        {
+            "name": "JC-2026-00012"
+        },
+        {
+            "name": "JC-2026-00013"
+        },
+        {
+            "name": "JC-2026-00014"
+        },
+        {
+            "name": "JC-2026-00015"
+        },
+        {
+            "name": "JC-2026-00016"
+        },
+        {
+            "name": "JC-2026-00017"
+        },
+        {
+            "name": "JC-2026-00018"
+        },
+        {
+            "name": "JC-2026-00020"
+        },
+        {
+     "name": "JC-2026-00021"
+        }
+    ]
+}
+GET /api/resource/Job Card/JC-0001 - single doc :http://quickfix-develop.localhost:8001/api/resource/Job Card/JC-2026-00001
+{
+    "data": {
+        "name": "JC-2026-00001",
+        "owner": "Administrator",
+        "creation": "2026-02-26 00:43:58.388927",
+        "modified": "2026-02-26 22:10:36.930418",
+        "modified_by": "Administrator",
+        "docstatus": 1,
+        "idx": 0,
+        "customer_name": "Sowmi",
+        "customer_phone": "9358525522",
+        "device_type": "Smart Phone",
+        "problem_description": "<div class=\"ql-editor read-mode\"><p>ddd</p></div>",
+        "assigned_technician": "TECH-0001",
+        "estimated_cost": 0.0,
+        "priority": "Normal",
+        "parts_total": 25.0,
+        "labour_charge": 500.0,
+        "final_amount": 525.0,
+        "payment_status": "Paid",
+        "status": "Ready for Delivery",
+        "amount": 0,
+        "doctype": "Job Card",
+        "parts_used": [
+            {
+                "name": "7h7it6qn81",
+                "owner": "Administrator",
+                "creation": "2026-02-26 00:43:58.388927",
+                "modified": "2026-02-26 22:10:36.930418",
+                "modified_by": "Administrator",
+                "docstatus": 1,
+                "idx": 1,
+                "part": "ABC-PART-2026-0002",
+                "part_name": "screw",
+                "unit_price": 25.0,
+                "quantity": 1.0,
+                "total_price": 25.0,
+                "parent": "JC-2026-00001",
+                "parentfield": "parts_used",
+                "parenttype": "Job Card",
+                "doctype": "Part Usage Entry"
+            }
+        ]
+    }
+}
+POST /api/resource/Spare Part - create a part
+http://quickfix-develop.localhost:8001/api/resource/Spare Part
+{
+    "data": {
+        "name": "XYZ-PART-2026-0004",
+        "owner": "Administrator",
+        "creation": "2026-03-11 10:57:41.134352",
+        "modified": "2026-03-11 10:57:41.134352",
+        "modified_by": "Administrator",
+        "docstatus": 0,
+        "idx": 0,
+        "part_name": "screen",
+        "part_code": "XYZ",
+        "unit_cost": 100.0,
+        "selling_price": 1000.0,
+        "stock_quantity": 10.0,
+        "recorder_level": 5.0,
+        "is_active": 1,
+        "doctype": "Spare Part"
+    }
+}
+PUT /api/resource/Spare Part/PART-0001 - update a field
+http://quickfix-develop.localhost:8001/api/resource/Spare Part/XYZ-PART-2026-0004
+{
+    "data": {
+        "name": "XYZ-PART-2026-0004",
+        "owner": "Administrator",
+        "creation": "2026-03-11 10:57:41.134352",
+        "modified": "2026-03-11 11:01:46.687522",
+        "modified_by": "Administrator",
+        "docstatus": 0,
+        "idx": 0,
+        "part_name": "screen",
+        "part_code": "XYZ",
+        "unit_cost": 100.0,
+        "selling_price": 1000.0,
+        "stock_quantity": 20.0,
+        "recorder_level": 5.0,
+        "is_active": 1,
+        "doctype": "Spare Part"
+    }
+}
+
+DELETE /api/resource/Spare Part/PART-0001 - delete it
+http://quickfix-develop.localhost:8001/api/resource/Spare Part/XYZ-PART-2026-0004
+{
+    "data": "ok"
+}
+
+ what is the difference between session cookie auth and token auth? Which is appropriate for browser use and which for server-to-server?
+ Session cookie auth is used when a user logins in to the browser and the server creates a session and a session id and stores in the browser and uses it wheneevr the user logins ,protected using the csrf tokens,
+ token auth generate the api secret and api key for the particular user ,these are sent with each request in the authorization headers.cookie auth is appropriate for the browser and token auth for the server
+
+ M1 
+ What Python functions/modules are blocked in the Server Script sandbox?
+

@@ -8,7 +8,7 @@ def test_failed_job():
 
 def check_low_stock():
 	# Idempotency guard
-	last_run = frappe.db.get_value("Audit Log", {"action": "low_stock_check", "date": today()}, "name")
+	last_run = frappe.db.get_value("Audit Log", {"actions": "low_stock_check", "timestamp": today()}, "name")
 
 	if last_run:
 		return
@@ -33,3 +33,25 @@ def generate_monthly_revenue_report():
     """)
 
 	frappe.log_error(f"Monthly revenue: {total}")
+
+
+def cancel_old_draft_job_cards():
+	frappe.db.sql("""
+        UPDATE `tabJob Card`
+        SET status = 'Cancelled'
+        WHERE docstatus = 0
+        LIMIT 1000
+    """)
+
+	frappe.db.commit()
+
+
+def insert_audit_logs():
+	logs = []
+
+	for i in range(500):
+		logs.append((f"LOG-{i}", "low_stock_check"))
+
+	frappe.db.bulk_insert("Audit Log", ["name", "actions"], logs)
+
+	frappe.db.commit()
