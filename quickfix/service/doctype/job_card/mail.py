@@ -8,3 +8,8 @@ def send_mail(job_card):
 	frappe.sendmail(
 		recipients=doc.customer_email, subject="Job Card", message=f"Job Card {doc.name} is ready"
 	)
+
+
+def error_mail():
+	x = 10 / 0
+	print(x)

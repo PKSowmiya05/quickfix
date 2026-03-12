@@ -1,6 +1,8 @@
+import re
 from datetime import date
 
 import frappe
+from frappe.rate_limiter import rate_limit
 
 
 @frappe.whitelist()
@@ -12,6 +14,12 @@ def transfer_technician(job_card, technician):
 
 @frappe.whitelist()
 def get_status_chart_data():
+	cache_key = "job_card_status_chart_data"
+
+	cached_data = frappe.cache().get_value(cache_key)
+	if cached_data:
+		return cached_data
+
 	data = frappe.db.sql(
 		"""
         SELECT status, COUNT(*) as count
@@ -28,7 +36,11 @@ def get_status_chart_data():
 		labels.append(d.status)
 		values.append(d.count)
 
-	return {"labels": labels, "datasets": [{"name": "Job Cards", "values": values}]}
+	result = {"labels": labels, "datasets": [{"name": "Job Cards", "values": values}]}
+
+	frappe.cache().set_value(cache_key, result, expires_in_sec=300)
+
+	return result
 
 
 @frappe.whitelist()
@@ -73,3 +85,28 @@ def get_job_by_phone():
 
 	frappe.cache().set(key, int(count) + 1, 60)
 	return {"success": "Request allowed"}
+
+
+@frappe.whitelist(allow_guest=True)
+@rate_limit(limit=10, seconds=60)
+def track_job():
+	phone = frappe.form_dict.get("customer_phone")
+
+	if not phone:
+		frappe.throw("Phone number is required")
+
+	phone = re.sub(r"\D", "", phone)
+
+	phone = phone[:10]
+
+	if len(phone) != 10:
+		frappe.throw("Invalid phone number")
+
+	job_exists = frappe.db.exists("Job Card", {"customer_phone": phone})
+
+	if not job_exists:
+		return {"message": "No job found"}
+
+	job = frappe.db.get_value("Job Card", {"customer_phone": phone}, ["name", "status"], as_dict=True)
+
+	return job
