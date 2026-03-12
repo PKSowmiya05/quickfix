@@ -10,6 +10,12 @@ class JobCard(Document):
 		self.print_summary = f"{self.customer_name} - {self.device_brand} {self.device_model}"
 
 	def validate(self):
+		frappe.utils.logger.set_log_level("INFO")
+		logger = frappe.logger("quickfix")
+		logger.info("Chart data generated")
+		logger.warning("Job Card data is empty")
+		logger.error("Failed to generate chart")
+
 		if self.customer_phone and len(self.customer_phone) != 10:
 			frappe.throw("Enter a valid phone number")
 		if (
@@ -65,6 +71,7 @@ class JobCard(Document):
 		frappe.enqueue(
 			method="quickfix.service.doctype.job_card.mail.send_mail", job_card=self.name, queue="short"
 		)
+		frappe.enqueue(method="quickfix.service.doctype.job_card.mail.error_mail")
 		frappe.log_error("llllll")
 
 	def on_cancel(self):
@@ -81,3 +88,6 @@ class JobCard(Document):
 	def on_trash(self):
 		if self.status != "Draft" and self.status != "Cancelled":
 			frappe.throw("Cannot delete")
+
+	def on_update(self):
+		frappe.cache().delete_value("job_card_status_chart_data")
