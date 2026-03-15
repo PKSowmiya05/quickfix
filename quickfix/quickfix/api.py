@@ -110,3 +110,9 @@ def track_job():
 	job = frappe.db.get_value("Job Card", {"customer_phone": phone}, ["name", "status"], as_dict=True)
 
 	return job
+
+
+@frappe.whitelist()
+def get_payment_key():
+	api_key = frappe.conf.get("payment_api_key")
+	return api_key

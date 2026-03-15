@@ -52,7 +52,8 @@
   {
    "fieldname": "customer_email",
    "fieldtype": "Data",
-   "label": "Customer Email"
+   "label": "Customer Email",
+   "options": "Email"
   },
   {
    "fieldname": "device_type",
@@ -99,7 +100,7 @@
    "fieldtype": "Link",
    "label": "Assigned Technician",
    "options": "Technician",
-    "search_index": 1
+   "search_index": 1
   },
   {
    "depends_on": "eval:doc.assigned_technician",
@@ -208,7 +209,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-09 16:29:58.467197",
+ "modified": "2026-03-13 12:13:39.134830",
  "modified_by": "Administrator",
  "module": "Service",
  "name": "Job Card",

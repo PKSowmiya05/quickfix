@@ -477,3 +477,15 @@ when there is the usage of logo or images that should be visibleto everyine we u
 
 Explain the issues with API key hardcoded in Python source code
 if the source code is shared or pushed to git repo, the api key becomes visible. anyone who gets the key can access the external service using your account.
+
+why should secrets NEVER be in common_site_config.json
+because the common site config is common for all the sites in the bench,it breaks site isolation.
+
+what is the risk of committing site_config.json to git?
+it exposes passwords, API keys, and other sensitive credentials, which attackers can use to gain unauthorized access to the system.
+
+N2
+explain what to check in Email Queue, SMTP logs, and Error Log when an email fails to send
+When an email fails, check:
+
+Email Queue status, error message, retry count,SMTP configuration/logs correct server, port, password,error log backend exceptions and stack traces ,scheduler ensures email background jobs are running

@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils.pdf import get_pdf
 
 
 class JobCard(Document):
@@ -18,6 +19,9 @@ class JobCard(Document):
 
 		if self.customer_phone and len(self.customer_phone) != 10:
 			frappe.throw("Enter a valid phone number")
+		if not self.customer_phone.isdigit():
+			frappe.throw("Phone must contain only digits")
+
 		if (
 			self.status in ["In Repair", "Ready for Delivery", "Delivered", "Cancelled"]
 			and not self.assigned_technician
@@ -25,9 +29,12 @@ class JobCard(Document):
 			frappe.throw("Tecnician must exist")
 		for i in self.parts_used:
 			i.total_price = i.quantity * i.unit_price
+
 		total = 0
 		for i in self.parts_used:
+			print()
 			total += i.total_price
+		print("total", total)
 		self.parts_total = total
 		labour = frappe.get_single_value("QuickFix Settings", "default_labour_charge")
 		self.labour_charge = labour
@@ -48,7 +55,14 @@ class JobCard(Document):
 			new_stock = stock - i.quantity
 			frappe.db.set_value("Spare Part", i.part, "stock_quantity", new_stock)
 		# here we cant use ignore_permissions true because frappe.set_value dont have the syntax to pass the ignore_permission
-
+		html = frappe.get_print("Job Card", self.name)
+		pdf = get_pdf(html)
+		frappe.sendmail(
+			recipients=[self.customer_email],
+			subject="Job Card Ready",
+			message="Your job card is ready for delivery.",
+			attachments=[{"fname": f"{self.name}.pdf", "fcontent": pdf}],
+		)
 		doc = frappe.get_doc(
 			{
 				"doctype": "Service Invoice",
