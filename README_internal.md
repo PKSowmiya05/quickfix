@@ -116,12 +116,21 @@ when a row created and the idx =2 is deleted frappe automatically reorders the i
 
 Rename one of your test Technician records using the Rename Document feature. Then check: does the assigned_technician field on linked Job Cards automatically update? Why or why not? What does "track changes" mean in this context?
 i created the test technician and renamed it through the rename document feature ,then while looking in to the assigned_technician filed the renamed value got automatically updated ,because it is a link field and frappe updates all the link fields during the rename .track changes means frappe records field modifications in the version table and shows them in the timeline, allowing us to see old and new values.
+E2
+when would merge=True be dangerous?
+it is dangerous because it preserves existing values and only partially updates record
 
+E3
 Assume the Frappe core updates Job Card's validate() to add a new check. If you
 override_doctype_class and forget to update super() - what breaks? Write a test that catches this.
 if we forget to update super() the core validations made will not work and only the overrided function will work 
 a test that catches this is that in validate i have written code so that if customer name is empty the document will not be saved and in the override doctype classs i have wrote the validation that checks the phone number validity ,if super doesnt exist allows the null customer name if super exits it doesnt allow null customer name
 
+why is doc_events safer than override_doctype_class for most use cases?
+doc_events is safer because it allows adding logic at specific lifecycle events without replacing core functionality
+override_doctype_class replaces the entire class
+
+F1
 Register TWO validate handlers on Job Card - one in your main controller and one in doc_events. in what order do they run? What happens if both raise a frappe.ValidationError?
 the main controller runs first and then the controller in the doc events runs then ,when both raise a frappe.validation error 
 the first executed controller method rises an exception ,execution stops immediately and the hooks doesnt even execute
@@ -129,6 +138,7 @@ the first executed controller method rises an exception ,execution stops immedia
 what happens when you register "*" AND a specific DocType handler for the same event? Do both run?
 for the same event the specific doctype controller and the wildcard controller also works ,frappe first calls the specific doctype controller and then calls the wildcard controller
 
+F3
 what is the difference? When would you use each?
 app_include_js is used to use the javascript into the frappe desk for logged  backend users.web_include_js is used to use the javascript into public website or portal pages they serve different environments and should be used depending on whether the customization is for internal users/desk or external users/website .
 
@@ -142,6 +152,26 @@ after the js changes the cache the assests need cache busting because it makes t
 Explain: what is the difference between a Jinja context available in Print Formats vs one available in Web Pages? Are they the same?
 jinja context available in the print formats recieves the document context while the web pages receives the website requests,the print format already knows which document which is printing while the web pages shows the data which we ask for,no they are not same
 
+
+F4
+explain the difference between override_whitelisted_methods (hook-based, reversible, explicit) vs monkey patching (import-time, brittle, invisible). When would you use each?
+override whitelist is a safe, hook-based way to override api and is explicit and reversible.while monkey patching modifies code at runtime, is brittle and hard to track, and should only be used when no official extension mechanism exists.
+
+What happens if TWO apps both register override_whitelisted_methods for the same method? Write the answer.
+if two apps override the same whitelisted method, only one override is applied based on app load order, with the last loaded app
+
+Explain about the Signature mismatch and not having exactly the same arguments as the original and in what case would you get a TypeError.
+a signature mismatch occurs when the overridden method does not have the same parameters as the original method ,frappe calls the method with the original arguments, a mismatch leads to a type error
+
+F5
+Explain fieldname collision risk: what happens if your Custom Field has the same fieldname as a field added by a future Frappe update?
+it leads to migration failure,data inconsistency and lead to form break
+
+Explain patching order: if Patch 1 creates a Custom Field and Patch 2 reads it, why must they be separate entries in patches.txt and never merged?
+patches must be separate because frappe executes them sequentially and commits each step. if patch 2 depends on a field created in patch 1, merging them can cause schema not yet updated errors, leading to migration failure
+
+
+G1
 What is the _qf_patched guard for in frappe.What breaks without it?
 the patch runs only once at the runtime and the qf patched helps to ensure that the patch is executed only once and preventing the recurssion and the duplication issues
 
@@ -404,6 +434,9 @@ http://quickfix-develop.localhost:8001/api/resource/Spare Part/XYZ-PART-2026-000
  Session cookie auth is used when a user logins in to the browser and the server creates a session and a session id and stores in the browser and uses it wheneevr the user logins ,protected using the csrf tokens,
  token auth generate the api secret and api key for the particular user ,these are sent with each request in the authorization headers.cookie auth is appropriate for the browser and token auth for the server
 
+ what are the real risks of allow_guest=True endpoints? List 3 specific attack vectors.
+ allow guest true is a public api ,if not protected the data will be manipulated or stolen or the sever will be overloaded
+
  M1 
  What Python functions/modules are blocked in the Server Script sandbox?
  A sandbox means a restricted Python environment where dangerous things are blocked to keep the server safe.since the server script code is written in ui and not in app code ,frappe block some python functions including import os,import sys,subprocess,eval, exec, file operations, and direct database access to protect frappe server
@@ -453,6 +486,7 @@ the command to clear the asset cache is to use bench build ,when some changes ar
 After making a DocType change, users see old field labels. What clears the DocType metadata cache?
 sometimes this happens because the cache stores the meta data in  the redis,running bench clear-cache or frappe.clear_cache clears this metadata cache so the system reloads the updated field labels and structure from the database.
 
+M3
 Describe how you would debug a bug that only occurs in production (not reproducible in dev) using only: Error Log records,Audit Log, and frappe.logger output - without enabling developer_mode
 first we can check the error log to identify the failing method and traceback ,to analyze the audit log  to determine what user action or document change triggered the issue
 

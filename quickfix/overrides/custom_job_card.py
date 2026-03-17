@@ -70,3 +70,15 @@ def get_shop_name():
 
 def format_job_id(value):
 	return f"JOB#{value}"
+
+
+def after_install():
+	frappe.make_property_setter(
+		{
+			"doctype": "Job Card",
+			"fieldname": "remarks",
+			"property": "bold",
+			"value": "1",
+			"property_type": "Check",
+		}
+	)

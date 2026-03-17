@@ -5,7 +5,14 @@ app_description = "Assessment purpose"
 app_email = "karthisowmiya05@gmail.com"
 app_license = "mit"
 
-fixtures = ["Device Type", "Role", "Custom DocPerm"]
+fixtures = [
+	"Custom Field",
+	"Property Setter",
+	"Role",
+	"Workspace",
+	{"doctype": "Device Type", "filters": [["name", "in", ["Smart Phone", "Laptop", "Tablet"]]]},
+	"QuickFix Settings",
+]
 # Apps
 # ------------------
 
@@ -86,6 +93,7 @@ app_include_js = "quickfix.bundle.js"
 
 # before_install = "quickfix.install.before_install"
 after_install = "quickfix.overrides.custom_job_card.install"
+after_install = "quickfix.overrides.custom_job_card.after_install"
 
 # Uninstallation
 # ------------

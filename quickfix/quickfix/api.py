@@ -112,7 +112,45 @@ def track_job():
 	return job
 
 
-@frappe.whitelist()
-def get_payment_key():
-	api_key = frappe.conf.get("payment_api_key")
-	return api_key
+# @frappe.whitelist()
+# def get_payment_key():
+# 	api_key = frappe.conf.get("payment_api_key")
+# 	return api_key
+
+
+# @frappe.whitelist(allow_guest=True)
+# def payment_webhook():
+# 	payload = frappe.request.get_data()
+# 	data = json.loads(payload)
+
+# 	ref = data.get("ref")
+# 	amount = data.get("final_amount")
+
+# 	if frappe.db.exists("Audit log", {"action": "payment_received", "document_name": ref}):
+# 		return {"status": "duplicate", "message": "Already processed"}
+
+# 	job = frappe.get_doc("Job Card", ref)
+
+# 	job.payment_status = "Paid"
+# 	job.paid_amount = amount
+# 	job.save(ignore_permissions=True)
+
+# 	invoice = frappe.db.get_value("Service Invoice", {"job_card": ref}, "name")
+
+# 	if invoice:
+# 		frappe.db.set_value("Service Invoice", invoice, {"payment_status": "Paid", "docstatus": 1})
+
+# 	frappe.get_doc(
+# 		{
+# 			"doctype": "Audit log",
+# 			"doctype_name": "Job Card",
+# 			"document_name": ref,
+# 			"action": "payment_received",
+# 			"user": "Administrator",
+# 			"timestamp": now(),
+# 		}
+# 	).insert(ignore_permissions=True)
+
+# 	frappe.db.commit()
+
+# 	return {"status": "ok"}
